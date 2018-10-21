@@ -60,7 +60,9 @@ public class ServerListDataLoader {
             CsvSchema schema = CsvSchema.builder().setUseHeader(true).build();
 
             MappingIterator<T> readValues =
-                    mapper.enable(CsvParser.Feature.TRIM_SPACES).reader(schema).forType(Server.class)
+                    mapper.enable(CsvParser.Feature.TRIM_SPACES)
+                            .enable(CsvParser.Feature.IGNORE_TRAILING_UNMAPPABLE)
+                            .reader(schema).forType(Server.class)
                             .readValues(new URL(url));
             return readValues.readAll();
         } catch (Exception e) {
