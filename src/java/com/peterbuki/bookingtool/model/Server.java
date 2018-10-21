@@ -1,22 +1,45 @@
 package com.peterbuki.bookingtool.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import java.util.Date;
 
 @Entity
+@JsonIgnoreProperties({ "id" })
+@JsonPropertyOrder(value = { "Type", "Host", "IP Address", "Contact", "Team", "Start", "End", "Cluster", "Component", "Release", "Usage"})
 public class Server {
 
     @Id
     private Integer id;
 
+    @JsonProperty(value = "Type")
     private String type;
+    @JsonProperty(value = "Host")
     private String hostname;
+    @JsonProperty(value = "IP Address")
     private String ip;
+    @JsonProperty(value = "Contact")
     private String contact;
+    @JsonProperty(value = "Team")
     private String team;
+    @JsonProperty(value = "Start")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date start;
+    @JsonProperty(value = "End")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date end;
+    @JsonProperty(value = "Cluster")
     private String cluster;
+    @JsonProperty(value = "Component")
     private String component;
+    @JsonProperty(value = "Release")
     private String release;
+    @JsonProperty(value = "Usage")
     private String usage;
 
     //Type, Host, IP Address, Contact, Team, Start, End,
@@ -103,6 +126,22 @@ public class Server {
 
     public void setUsage(String usage) {
         this.usage = usage;
+    }
+
+    public Date getStart() {
+        return start;
+    }
+
+    public void setStart(Date start) {
+        this.start = start;
+    }
+
+    public Date getEnd() {
+        return end;
+    }
+
+    public void setEnd(Date end) {
+        this.end = end;
     }
 
     public String toString() {
