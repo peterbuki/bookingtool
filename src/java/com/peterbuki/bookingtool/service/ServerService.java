@@ -3,6 +3,7 @@ package com.peterbuki.bookingtool.service;
 import com.peterbuki.bookingtool.dao.ServerDao;
 import com.peterbuki.bookingtool.model.Server;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -10,6 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Component
+@PropertySource("application.properties")
 public class ServerService {
 
     @Autowired
@@ -25,7 +27,7 @@ public class ServerService {
     public void addAll(Collection<Server> servers)
     {
         for (Server server : servers) {
-            serverDao.persist(server);
+            add(server);
         }
     }
 

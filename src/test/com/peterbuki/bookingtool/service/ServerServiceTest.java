@@ -79,14 +79,15 @@ public class ServerServiceTest {
     @Test
     public void findByHostname() {
         Server server;
-        for (int i = 1; i<=10; i++)
+        id=10;
+        for (int i = 11; i<=20; i++)
         {
             server = generateServer("host" + i);
             serverService.add(server);
         }
 
-        server = serverService.findByHostname("host5");
-        assertEquals("10.11.12.5", server.getIp());
+        server = serverService.findByHostname("host15");
+        assertEquals("10.11.12.15", server.getIp());
     }
 
     @Test

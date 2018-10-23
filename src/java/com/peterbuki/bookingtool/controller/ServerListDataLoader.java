@@ -1,6 +1,10 @@
 package com.peterbuki.bookingtool.controller;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.MappingIterator;
+import com.fasterxml.jackson.databind.deser.DeserializationProblemHandler;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
@@ -20,12 +24,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -55,13 +61,31 @@ public class ServerListDataLoader {
     public <T> List<T> loadObjectList(Class<T> type, String url) {
 
         try {
-            CsvMapper mapper = new CsvMapper();
+            final CsvMapper mapper = new CsvMapper();
 
-            CsvSchema schema = CsvSchema.builder().setUseHeader(true).build();
+            final CsvSchema schema = CsvSchema.builder().setUseHeader(true).build();
 
+            DeserializationProblemHandler deserializationProblemHandler = new DeserializationProblemHandler() {
+                @Override
+                public Object handleWeirdStringValue(DeserializationContext ctxt,
+                                                     Class<?> targetType,
+                                                     String valueToConvert,
+                                                     String failureMsg)
+                        throws IOException {
+                    if (targetType == Date.class) {
+                        return new Date();
+                    }
+                    else {
+                        return "Error: remove commas from your data!";
+                    }
+                }
+            };
             MappingIterator<T> readValues =
                     mapper.enable(CsvParser.Feature.TRIM_SPACES)
+                            // FIXME: objects with extra fields should be marked as invalid
                             .enable(CsvParser.Feature.IGNORE_TRAILING_UNMAPPABLE)
+                            // FIXME: objects with invalid Dates should be marked s invalid
+                            .addHandler(deserializationProblemHandler)
                             .reader(schema).forType(Server.class)
                             .readValues(new URL(url));
             return readValues.readAll();

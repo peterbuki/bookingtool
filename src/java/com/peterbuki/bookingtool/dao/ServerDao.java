@@ -10,10 +10,16 @@ import java.util.List;
 @Component
 public class ServerDao {
 
+    private static Integer id = 0;
+
     @PersistenceContext
     private EntityManager em;
 
     public void persist(Server server) {
+        if ( server.getId() == null )
+        {
+            server.setId(id++);
+        }
         em.persist(server);
     }
 
