@@ -1,13 +1,13 @@
 package com.peterbuki.bookingtool.controller;
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.MappingIterator;
 import com.fasterxml.jackson.databind.deser.DeserializationProblemHandler;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.peterbuki.bookingtool.model.Server;
 import com.peterbuki.bookingtool.service.ServerService;
 import org.slf4j.Logger;
@@ -16,20 +16,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.URL;
-import java.nio.charset.Charset;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -72,14 +65,18 @@ public class ServerListDataLoader {
                                                      String valueToConvert,
                                                      String failureMsg)
                         throws IOException {
-                    if (targetType == Date.class) {
-                        return new Date();
-                    }
-                    else {
+                    if (targetType == LocalDateTime.class) {
+                        return LocalDateTime.ofEpochSecond(0, 0, ZoneOffset.UTC);
+                    } else {
                         return "Error: remove commas from your data!";
                     }
                 }
             };
+            JavaTimeModule javaTimeModule = new JavaTimeModule();
+            javaTimeModule.addDeserializer(LocalDateTime.class,
+                    new LocalDateTimeDeserializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+
+            mapper.registerModule(javaTimeModule);
             MappingIterator<T> readValues =
                     mapper.enable(CsvParser.Feature.TRIM_SPACES)
                             // FIXME: objects with extra fields should be marked as invalid
