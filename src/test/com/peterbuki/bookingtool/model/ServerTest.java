@@ -1,10 +1,31 @@
 package com.peterbuki.bookingtool.model;
 
+import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class ServerTest {
 
-    @org.junit.Test
+    private static Integer id = 0;
+
+    private Server generateServer(String hostname) {
+        Server server = new Server();
+
+        server.setId(++id);
+        server.setType("HP DL380 G7");
+        server.setHostname(hostname);
+        server.setIp("10.11.12.0");
+        server.setContact("info@contact.com");
+        server.setTeam("A-Team");
+        server.setCluster("Main Cluster");
+        server.setComponent("Acme");
+        server.setRelease("v12.0.1");
+        server.setUsage("CI cluster");
+
+        return server;
+    }
+
+    @Test
     public void testToString() {
         Server server = new Server();
 
@@ -28,4 +49,15 @@ public class ServerTest {
         // "Server id=%d, type='%s', hostname='%s', ip='%s', contact='%s', team='%s', " +
         //                "cluster='%s', component='%s', release='%s', usage='%s'"
     }
+
+    @Test
+    public void equalsTest() {
+        Server s1 = generateServer("alma");
+        Server s2 = generateServer("alma");
+
+        assertEquals(s1, s2);
+        s2.setUsage("ho-ho-ho");
+        assertNotEquals(s1, s2);
+    }
+
 }

@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @JsonIgnoreProperties({ "id" })
@@ -29,10 +29,10 @@ public class Server {
     private String team;
     @JsonProperty(value = "Start")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date start;
+    private LocalDateTime start;
     @JsonProperty(value = "End")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date end;
+    private LocalDateTime end;
     @JsonProperty(value = "Cluster")
     private String cluster;
     @JsonProperty(value = "Component")
@@ -128,25 +128,34 @@ public class Server {
         this.usage = usage;
     }
 
-    public Date getStart() {
+    public LocalDateTime getStart() {
         return start;
     }
 
-    public void setStart(Date start) {
+    public void setStart(LocalDateTime start) {
         this.start = start;
     }
 
-    public Date getEnd() {
+    public LocalDateTime getEnd() {
         return end;
     }
 
-    public void setEnd(Date end) {
+    public void setEnd(LocalDateTime end) {
         this.end = end;
     }
 
+    @Override
     public String toString() {
         return String.format("Server id=%d, type='%s', hostname='%s', ip='%s', contact='%s', team='%s', " +
                 "cluster='%s', component='%s', release='%s', usage='%s'",
                 id, type, hostname, ip, contact, team, cluster, component, release, usage);
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        Server server = (Server) object;
+        return type.equals(server.type) && hostname.equals(server.hostname) && ip.equals(server.ip) &&
+                contact.equals(server.contact) && team.equals(server.team) && cluster.equals(server.cluster) &&
+                component.equals(server.component) && release.equals(server.release) && usage.equals(server.usage);
     }
 }
