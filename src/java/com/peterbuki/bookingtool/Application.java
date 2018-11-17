@@ -20,15 +20,5 @@ public class Application {
     @Autowired
     private ServerService serverService;
 
-    @Theme("valo")
-    @SpringUI(path = "/hello")
-    public static class VaadinUI extends UI {
 
-
-        @Override
-        protected void init(VaadinRequest request) {
-            setContent(new Label("Hello!"));
-        }
-
-    }
 }
