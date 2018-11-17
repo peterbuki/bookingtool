@@ -50,5 +50,23 @@ public class Utility {
         return builder.append("|").append(StringUtils.center(data, columns - 2)).append("|\n");
     }
 
+    private static Integer id = 0;
+
+    public static Server generateServer(String hostname) {
+        Server server = new Server();
+
+        server.setId(++id);
+        server.setType("HP DL380 G7");
+        server.setHostname(hostname);
+        server.setIp("10.11.12.0");
+        server.setContact("info@contact.com");
+        server.setTeam("A-Team");
+        server.setCluster("Main Cluster");
+        server.setComponent("Acme");
+        server.setRelease("v12.0.1");
+        server.setUsage("CI cluster");
+
+        return server;
+    }
 
 }

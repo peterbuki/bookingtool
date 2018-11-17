@@ -3,6 +3,7 @@ package com.peterbuki.bookingtool.controller;
 import com.peterbuki.bookingtool.Application;
 import com.peterbuki.bookingtool.model.ServerTest;
 import com.peterbuki.bookingtool.service.ServerService;
+import com.peterbuki.bookingtool.util.Utility;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,7 +44,7 @@ public class ServerListControllerTest {
     @Test
     public void findByHostname_hostWithPrettyFormatting() {
 
-        serverService.add(ServerTest.generateServer("test1"));
+        serverService.add(Utility.generateServer("test1"));
 
         HttpEntity<String> entity = new HttpEntity<>(null, headers);
 
