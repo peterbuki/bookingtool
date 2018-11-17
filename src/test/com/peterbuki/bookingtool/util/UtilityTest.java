@@ -37,7 +37,7 @@ public class UtilityTest {
         String result = Utility.serverFormatter(server, 80);
 
         String expectedLines =
-                "+----------------------------------Test v1.0-----------------------------------+\n" +
+                        "+----------------------------------Test v1.0-----------------------------------+\n" +
                         "|                  No information was found in the database.                   |\n" +
                         "+------------------------------------------------------------------------------+\n";
 
@@ -46,17 +46,19 @@ public class UtilityTest {
 
     @Test
     public void testServerFormatter_ServerWithShortLines() {
-        String resultLines = Utility.serverFormatter(server, 80);
+        String resultLines = Utility.serverFormatter(server, 40);
         System.out.println(resultLines);
 
         String expectedLines =
-                "+----------------------------------Test v1.0-----------------------------------+\n" +
-                        "|                        IP: 1.2.3.4 Hostname: myserver                        |\n" +
-                        "|                  Team: ACS team Contact: info@acs-team.none                  |\n" +
-                        "|              Cluster: Main Tribe CI Usage: Jenkins master node               |\n" +
-                        "|                       Component: Apache Release: 2.6.1                       |\n" +
-                        "|                    Booking from 1990-03-31 to 2020-03-31                     |\n" +
-                        "+------------------------------------------------------------------------------+\n";
+                        "+--------------Test v1.0---------------+\n" +
+                        "|    IP: 1.2.3.4 Hostname: myserver    |\n" +
+                        "|            Team: ACS team            |\n" +
+                        "|     Contact: info@acs-team.none      |\n" +
+                        "|        Cluster: Main Tribe CI        |\n" +
+                        "|      Usage: Jenkins master node      |\n" +
+                        "|   Component: Apache Release: 2.6.1   |\n" +
+                        "|Booking from 1990-03-31 to 2020-03-31 |\n" +
+                        "+--------------------------------------+\n";
         assertEquals(expectedLines, resultLines);
     }
 
