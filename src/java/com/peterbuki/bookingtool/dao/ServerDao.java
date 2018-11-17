@@ -4,6 +4,7 @@ import com.peterbuki.bookingtool.model.Server;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class ServerDao {
         return em.createQuery("SELECT s FROM Server s").getResultList();
     }
 
-    public Server findByHostname(String hostname) {
+    public Server findByHostname(String hostname) throws NoResultException {
         return (Server) em.createQuery("SELECT s FROM Server s where s.hostname = :hostname")
                 .setParameter("hostname", hostname)
                 .setMaxResults(1)

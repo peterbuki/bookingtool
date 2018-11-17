@@ -7,6 +7,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.NoResultException;
 import java.util.Collection;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class ServerService {
     }
 
     @Transactional
-    public Server findByHostname(String hostname)
+    public Server findByHostname(String hostname) throws NoResultException
     {
         return serverDao.findByHostname(hostname);
     }
