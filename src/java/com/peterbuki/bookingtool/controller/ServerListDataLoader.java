@@ -44,7 +44,7 @@ public class ServerListDataLoader {
         this.url = url;
     }
 
-    @EventListener(ApplicationReadyEvent.class)
+    //@EventListener(ApplicationReadyEvent.class)
     public void loadTestData() throws Exception {
         List<Server> servers = loadObjectList(Server.class, url);
 
