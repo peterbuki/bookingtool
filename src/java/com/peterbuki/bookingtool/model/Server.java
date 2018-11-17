@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Entity
 @JsonIgnoreProperties({ "id" })
 @JsonPropertyOrder(value = { "Type", "Host", "IP Address", "Contact", "Team", "Start", "End", "Cluster", "Component", "Release", "Usage"})
-public class Server {
+public class Server extends Dto{
 
     @Id
     private Integer id;
