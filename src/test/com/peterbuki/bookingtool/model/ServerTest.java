@@ -8,7 +8,7 @@ public class ServerTest {
 
     private static Integer id = 0;
 
-    private Server generateServer(String hostname) {
+    public static Server generateServer(String hostname) {
         Server server = new Server();
 
         server.setId(++id);
