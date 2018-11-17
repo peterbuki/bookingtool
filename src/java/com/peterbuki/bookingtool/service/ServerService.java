@@ -47,7 +47,7 @@ public class ServerService {
         return serverDao.count();
     }
 
-    public void update(Server server) {
-        serverDao.updateUsageByHostname(server);
+    public int update(Server server) {
+        return serverDao.updateUsageByHostname(server.getHostname(), server.getUsage());
     }
 }

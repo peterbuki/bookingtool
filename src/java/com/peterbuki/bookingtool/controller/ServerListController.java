@@ -3,15 +3,13 @@ package com.peterbuki.bookingtool.controller;
 import com.peterbuki.bookingtool.model.Server;
 import com.peterbuki.bookingtool.service.ServerService;
 import com.peterbuki.bookingtool.util.Utility;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.NoResultException;
 import java.net.InetAddress;
@@ -19,6 +17,7 @@ import java.net.UnknownHostException;
 
 @RestController
 public class ServerListController {
+    private static final Logger logger = LoggerFactory.getLogger(ServerListDataLoader.class);
 
     @Value("${bookingtool.info}")
     public static String HEADER_INFO = "Test v1.0";
@@ -63,19 +62,28 @@ public class ServerListController {
     }
 
     @RequestMapping(value = "/updateUsageByHostname", method = RequestMethod.POST)
-    public ResponseEntity<String> updateCurrentHost(Server server) {
+    public ResponseEntity<String> updateUsageByHostname(@RequestBody Server server) {
 
         if (server.getHostname() == null) {
+            logger.warn("Update failed, missing hostname.");
             return new ResponseEntity<>("Missing hostname", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        try {
-            serverService.updateByHostname(server);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        int rowsUpdated = serverService.update(server);
+        if (rowsUpdated > 0) {
+            logger.debug(
+                    String.format("Updated host '%s', set usage to '%s'.",
+                            server.getHostname(),
+                            server.getUsage()));
+            return new ResponseEntity<>(
+                    String.format("Updated host '%s' usage to '%s'.", server.getHostname(), server.getUsage()),
+                    HttpStatus.OK);
+        } else {
+            logger.error("No rows updated");
+            return new ResponseEntity<>(String.format("Host '%s' not found in the database.", server.getHostname()),
+                    HttpStatus.NOT_FOUND);
         }
     }
-
-
 }
+
+

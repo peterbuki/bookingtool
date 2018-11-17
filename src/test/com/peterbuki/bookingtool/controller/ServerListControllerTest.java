@@ -1,6 +1,7 @@
 package com.peterbuki.bookingtool.controller;
 
 import com.peterbuki.bookingtool.Application;
+import com.peterbuki.bookingtool.model.Server;
 import com.peterbuki.bookingtool.model.ServerTest;
 import com.peterbuki.bookingtool.service.ServerService;
 import com.peterbuki.bookingtool.util.Utility;
@@ -65,7 +66,50 @@ public class ServerListControllerTest {
 
 
     @Test
-    public void updateCurrentHost() {
+    public void updateCurrentHost_NullHost() {
+        Server server = new Server();
+        server.setUsage("New usage");
+        HttpEntity<Server> entity = new HttpEntity<>(server, headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("/updateUsageByHostname"),
+                HttpMethod.POST, entity, String.class);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertEquals("Missing hostname", response.getBody());
+    }
+
+    @Test
+    public void updateCurrentHost_UnknownHost() {
+        Server server = Utility.generateServer("test2");
+        server.setUsage("New usage");
+
+        HttpEntity<Server> entity = new HttpEntity<>(server, headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("/updateUsageByHostname"),
+                HttpMethod.POST, entity, String.class);
+
+        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        assertEquals(String.format("Host '%s' not found in the database.", server.getHostname()), response.getBody());
+    }
+
+    @Test
+    public void updateCurrentHost_HostUpdated() {
+        Server server = Utility.generateServer("test4");
+        serverService.add(server);
+
+        server.setUsage("New usage");
+        HttpEntity<Server> entity = new HttpEntity<>(server, headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("/updateUsageByHostname"),
+                HttpMethod.POST, entity, String.class);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(
+                String.format("Updated host '%s' usage to '%s'.", server.getHostname(), server.getUsage()),
+                response.getBody());
+
+        Server fromDb = serverService.findByHostname(server.getHostname());
+        assertEquals("New usage", fromDb.getUsage());
     }
 
 
