@@ -1,5 +1,6 @@
 package com.peterbuki.bookingtool.dao;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.peterbuki.bookingtool.model.Server;
 import org.springframework.stereotype.Component;
 
@@ -38,4 +39,12 @@ public class ServerDao {
     public Long count() {
         return (Long) em.createQuery("SELECT count(*) FROM Server s").getSingleResult();
     }
+
+    public void updateUsageByHostname(Server server) {
+        em.createQuery("UPDATE Server s  set usage = :usage where hostname = :hostname")
+                .setParameter("hostname", server.getHostname())
+                .setParameter("usage", server.getUsage())
+                .executeUpdate();
+    }
+
 }

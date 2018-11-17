@@ -46,4 +46,8 @@ public class ServerService {
     public Long count() {
         return serverDao.count();
     }
+
+    public void update(Server server) {
+        serverDao.updateUsageByHostname(server);
+    }
 }
