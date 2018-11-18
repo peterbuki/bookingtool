@@ -4,15 +4,16 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.peterbuki.bookingtool.service.ServerService;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 @Entity
-@JsonIgnoreProperties({ "id" })
-@JsonPropertyOrder(value = { "Type", "Host", "IP Address", "Contact", "Team", "Start", "End", "Cluster", "Component", "Release", "Usage"})
-public class Server extends Dto{
+@JsonIgnoreProperties({"id"})
+@JsonPropertyOrder(value = {"Type", "Host", "IP Address", "Contact", "Team", "Start", "End", "Cluster", "Component", "Release", "Usage"})
+public class ServerDto extends Dto {
 
     @Id
     private Integer id;
@@ -47,6 +48,11 @@ public class Server extends Dto{
 
     // Cluster, Component, Release, Usage
     // Red: Red/Orange Tribe CI, ARK, 17.0.1, shared Red Tribe/Orange CI w/vmx-eea208; ARK; 45+ ppl; 17.0.1 GA 11/30/17
+
+    @Override
+    public Class getServiceClass() {
+        return ServerService.class;
+    }
 
     public Integer getId() {
         return id;
@@ -146,14 +152,14 @@ public class Server extends Dto{
 
     @Override
     public String toString() {
-        return String.format("Server id=%d, type='%s', hostname='%s', ip='%s', contact='%s', team='%s', " +
-                "cluster='%s', component='%s', release='%s', usage='%s'",
+        return String.format("ServerDto id=%d, type='%s', hostname='%s', ip='%s', contact='%s', team='%s', " +
+                        "cluster='%s', component='%s', release='%s', usage='%s'",
                 id, type, hostname, ip, contact, team, cluster, component, release, usage);
     }
 
     @Override
     public boolean equals(Object object) {
-        Server server = (Server) object;
+        ServerDto server = (ServerDto) object;
         return type.equals(server.type) && hostname.equals(server.hostname) && ip.equals(server.ip) &&
                 contact.equals(server.contact) && team.equals(server.team) && cluster.equals(server.cluster) &&
                 component.equals(server.component) && release.equals(server.release) && usage.equals(server.usage);

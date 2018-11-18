@@ -1,6 +1,6 @@
 package com.peterbuki.bookingtool.service;
 
-import com.peterbuki.bookingtool.model.Server;
+import com.peterbuki.bookingtool.model.ServerDto;
 import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -19,8 +19,8 @@ public class ServerServiceTest {
     private static ServerService serverService;
     private static ClassPathXmlApplicationContext ctx;
 
-    private Server generateServer(String hostname) {
-        Server server = new Server();
+    private ServerDto generateServer(String hostname) {
+        ServerDto server = new ServerDto();
 
         server.setId(++id);
         server.setType("HP DL380 G7");
@@ -66,8 +66,8 @@ public class ServerServiceTest {
 
         expectedException.expect(EntityExistsException.class);
 
-        Server server1 = generateServer("legal");
-        Server server2 = generateServer("illegal2");
+        ServerDto server1 = generateServer("legal");
+        ServerDto server2 = generateServer("illegal2");
         server2.setId(server1.getId());
 
         serverService.addAll(Arrays.asList(server1, server2));
@@ -78,7 +78,7 @@ public class ServerServiceTest {
 
     @Test
     public void findByHostname() {
-        Server server;
+        ServerDto server;
         id=10;
         for (int i = 11; i<=20; i++)
         {
@@ -96,7 +96,7 @@ public class ServerServiceTest {
         final int recordCountToBeAdded = 1000;
         final int initialRecordCount = serverService.listAll().size();
         Long startTime = System.currentTimeMillis();
-        Server server;
+        ServerDto server;
         for (int i=1; i<=recordCountToBeAdded; i++)
         {
             server = generateServer("host" + i);

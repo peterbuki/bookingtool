@@ -1,6 +1,6 @@
 package com.peterbuki.bookingtool.controller;
 
-import com.peterbuki.bookingtool.model.Server;
+import com.peterbuki.bookingtool.model.ServerDto;
 import com.peterbuki.bookingtool.service.ServerService;
 import com.peterbuki.bookingtool.util.Utility;
 import org.slf4j.Logger;
@@ -36,7 +36,7 @@ public class ServerListController {
                                                  @RequestParam(value = "columns", defaultValue = "80") int columns) {
         ResponseEntity<String> result;
         try {
-            Server server = serverService.findByHostname(hostname);
+            ServerDto server = serverService.findByHostname(hostname);
             result = new ResponseEntity<>(Utility.serverFormatter(server, columns), HttpStatus.OK);
         } catch (NoResultException e) {
             result = new ResponseEntity<>(
@@ -62,7 +62,7 @@ public class ServerListController {
     }
 
     @RequestMapping(value = "/updateUsageByHostname", method = RequestMethod.POST)
-    public ResponseEntity<String> updateUsageByHostname(@RequestBody Server server) {
+    public ResponseEntity<String> updateUsageByHostname(@RequestBody ServerDto server) {
 
         if (server.getHostname() == null) {
             logger.warn("Update failed, missing hostname.");

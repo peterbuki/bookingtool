@@ -5,12 +5,12 @@ import org.junit.Test;
 import static com.peterbuki.bookingtool.util.Utility.generateServer;
 import static org.junit.Assert.*;
 
-public class ServerTest {
+public class ServerDtoTest {
 
 
     @Test
     public void testToString() {
-        Server server = new Server();
+        ServerDto server = new ServerDto();
 
         server.setId(123);
         server.setType("HP DL380 G7");
@@ -24,19 +24,19 @@ public class ServerTest {
         server.setUsage("CI cluster");
 
         String serverString = server.toString();
-        String expected = "Server id=123, type='HP DL380 G7', hostname='myserver1', ip='10.11.12.13', " +
+        String expected = "ServerDto id=123, type='HP DL380 G7', hostname='myserver1', ip='10.11.12.13', " +
                 "contact='info@contact.com', team='A-Team', cluster='Main Cluster', component='Acme', " +
                 "release='v12.0.1', usage='CI cluster'";
         assertEquals(expected, serverString);
 
-        // "Server id=%d, type='%s', hostname='%s', ip='%s', contact='%s', team='%s', " +
+        // "ServerDto id=%d, type='%s', hostname='%s', ip='%s', contact='%s', team='%s', " +
         //                "cluster='%s', component='%s', release='%s', usage='%s'"
     }
 
     @Test
     public void equalsTest() {
-        Server s1 = generateServer("alma");
-        Server s2 = generateServer("alma");
+        ServerDto s1 = generateServer("alma");
+        ServerDto s2 = generateServer("alma");
 
         assertEquals(s1, s2);
         s2.setUsage("ho-ho-ho");

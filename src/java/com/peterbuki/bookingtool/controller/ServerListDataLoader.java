@@ -8,14 +8,12 @@ import com.fasterxml.jackson.dataformat.csv.CsvParser;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.peterbuki.bookingtool.model.Server;
+import com.peterbuki.bookingtool.model.ServerDto;
 import com.peterbuki.bookingtool.service.ServerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -24,7 +22,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 @Component
@@ -46,7 +43,7 @@ public class ServerListDataLoader {
 
     //@EventListener(ApplicationReadyEvent.class)
     public void loadTestData() throws Exception {
-        List<Server> servers = loadObjectList(Server.class, url);
+        List<ServerDto> servers = loadObjectList(ServerDto.class, url);
 
         serverService.addAll(servers);
     }
@@ -83,7 +80,7 @@ public class ServerListDataLoader {
                             .enable(CsvParser.Feature.IGNORE_TRAILING_UNMAPPABLE)
                             // FIXME: objects with invalid Dates should be marked s invalid
                             .addHandler(deserializationProblemHandler)
-                            .reader(schema).forType(Server.class)
+                            .reader(schema).forType(ServerDto.class)
                             .readValues(new URL(url));
             return readValues.readAll();
         } catch (Exception e) {

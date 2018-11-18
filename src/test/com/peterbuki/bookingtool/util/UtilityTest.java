@@ -1,6 +1,6 @@
 package com.peterbuki.bookingtool.util;
 
-import com.peterbuki.bookingtool.model.Server;
+import com.peterbuki.bookingtool.model.ServerDto;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,11 +11,11 @@ import static org.junit.Assert.*;
 public class UtilityTest {
 
 
-    private Server server;
+    private ServerDto server;
 
     @Before
     public void setUp() {
-        server = new Server();
+        server = new ServerDto();
         server.setIp("1.2.3.4");
         server.setHostname("myserver");
 

@@ -1,6 +1,6 @@
 package com.peterbuki.bookingtool.controller;
 
-import com.peterbuki.bookingtool.model.Server;
+import com.peterbuki.bookingtool.model.ServerDto;
 import com.peterbuki.bookingtool.service.ServerService;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -12,9 +12,7 @@ import org.mockito.Mockito;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -27,7 +25,7 @@ public class ServerListDataLoaderTest {
     private ServerListDataLoader loader;
     private ArgumentCaptor<List> argument;
     private static HttpServer server;
-    private Server expectedServer;
+    private ServerDto expectedServer;
 
     @Before
     public void setUp() throws Exception {
@@ -52,7 +50,7 @@ public class ServerListDataLoaderTest {
         loader.setLoaderUrl("http://localhost:46765/contactcomma");
         loader.loadTestData();
         Mockito.verify(serverService).addAll(argument.capture());
-        List<Server> resultServers = (List<Server>) argument.getValue();
+        List<ServerDto> resultServers = (List<ServerDto>) argument.getValue();
         System.out.println(resultServers.get(0));
         assertEquals(1, resultServers.size());
         assertEquals(expectedServer, resultServers.get(0));
@@ -63,7 +61,7 @@ public class ServerListDataLoaderTest {
         loader.setLoaderUrl("http://localhost:46765/usagecomma");
         loader.loadTestData();
         Mockito.verify(serverService).addAll(argument.capture());
-        List<Server> resultServers = (List<Server>) argument.getValue();
+        List<ServerDto> resultServers = (List<ServerDto>) argument.getValue();
         assertEquals(1, resultServers.size());
         assertEquals(expectedServer, resultServers.get(0));
     }
@@ -74,16 +72,16 @@ public class ServerListDataLoaderTest {
         loader.loadTestData();
 
         Mockito.verify(serverService).addAll(argument.capture());
-        List<Server> resultServers = (List<Server>) argument.getValue();
+        List<ServerDto> resultServers = (List<ServerDto>) argument.getValue();
 
         assertEquals(2, resultServers.size());
-        Server resultServer = resultServers.get(1);
+        ServerDto resultServer = resultServers.get(1);
 
         assertEquals(expectedServer, resultServer);
     }
 
     private void buildExpectedServer() {
-        expectedServer = new Server();
+        expectedServer = new ServerDto();
         expectedServer.setType("Dell PowerEdge");
         expectedServer.setHostname("server2");
         expectedServer.setIp("10.10.10.1");

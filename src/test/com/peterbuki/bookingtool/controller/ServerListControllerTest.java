@@ -1,11 +1,9 @@
 package com.peterbuki.bookingtool.controller;
 
 import com.peterbuki.bookingtool.Application;
-import com.peterbuki.bookingtool.model.Server;
-import com.peterbuki.bookingtool.model.ServerTest;
+import com.peterbuki.bookingtool.model.ServerDto;
 import com.peterbuki.bookingtool.service.ServerService;
 import com.peterbuki.bookingtool.util.Utility;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,9 +65,9 @@ public class ServerListControllerTest {
 
     @Test
     public void updateCurrentHost_NullHost() {
-        Server server = new Server();
+        ServerDto server = new ServerDto();
         server.setUsage("New usage");
-        HttpEntity<Server> entity = new HttpEntity<>(server, headers);
+        HttpEntity<ServerDto> entity = new HttpEntity<>(server, headers);
 
         ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("/updateUsageByHostname"),
                 HttpMethod.POST, entity, String.class);
@@ -80,10 +78,10 @@ public class ServerListControllerTest {
 
     @Test
     public void updateCurrentHost_UnknownHost() {
-        Server server = Utility.generateServer("test2");
+        ServerDto server = Utility.generateServer("test2");
         server.setUsage("New usage");
 
-        HttpEntity<Server> entity = new HttpEntity<>(server, headers);
+        HttpEntity<ServerDto> entity = new HttpEntity<>(server, headers);
 
         ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("/updateUsageByHostname"),
                 HttpMethod.POST, entity, String.class);
@@ -94,11 +92,11 @@ public class ServerListControllerTest {
 
     @Test
     public void updateCurrentHost_HostUpdated() {
-        Server server = Utility.generateServer("test4");
+        ServerDto server = Utility.generateServer("test4");
         serverService.add(server);
 
         server.setUsage("New usage");
-        HttpEntity<Server> entity = new HttpEntity<>(server, headers);
+        HttpEntity<ServerDto> entity = new HttpEntity<>(server, headers);
 
         ResponseEntity<String> response = restTemplate.exchange(createURLWithPort("/updateUsageByHostname"),
                 HttpMethod.POST, entity, String.class);
@@ -108,7 +106,7 @@ public class ServerListControllerTest {
                 String.format("Updated host '%s' usage to '%s'.", server.getHostname(), server.getUsage()),
                 response.getBody());
 
-        Server fromDb = serverService.findByHostname(server.getHostname());
+        ServerDto fromDb = serverService.findByHostname(server.getHostname());
         assertEquals("New usage", fromDb.getUsage());
     }
 

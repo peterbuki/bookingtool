@@ -1,6 +1,6 @@
 package com.peterbuki.bookingtool.dao;
 
-import com.peterbuki.bookingtool.model.Server;
+import com.peterbuki.bookingtool.model.ServerDto;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Component;
@@ -20,32 +20,32 @@ public class ServerDao {
     @PersistenceContext
     private EntityManager em;
 
-    public void persist(Server server) {
+    public void persist(ServerDto server) {
         if (server.getId() == null) {
             server.setId(id++);
         }
         em.persist(server);
     }
 
-    public List<Server> findAll() {
-        return em.createQuery("SELECT s FROM Server s").getResultList();
+    public List<ServerDto> findAll() {
+        return em.createQuery("SELECT s FROM ServerDto s").getResultList();
     }
 
-    public Server findByHostname(String hostname) throws NoResultException {
-        return (Server) em.createQuery("SELECT s FROM Server s where s.hostname = :hostname")
+    public ServerDto findByHostname(String hostname) throws NoResultException {
+        return (ServerDto) em.createQuery("SELECT s FROM ServerDto s where s.hostname = :hostname")
                 .setParameter("hostname", hostname)
                 .setMaxResults(1)
                 .getSingleResult();
     }
 
     public Long count() {
-        return (Long) em.createQuery("SELECT count(*) FROM Server s").getSingleResult();
+        return (Long) em.createQuery("SELECT count(*) FROM ServerDto s").getSingleResult();
     }
 
     @Modifying
     @Transactional
     public int updateUsageByHostname(@Param("hostname") String hostname, @Param("usage") String usage) {
-        Query query = em.createQuery("UPDATE Server s set s.usage = :usage where s.hostname = :hostname");
+        Query query = em.createQuery("UPDATE ServerDto s set s.usage = :usage where s.hostname = :hostname");
         return query.setParameter("hostname", hostname).setParameter("usage", usage).executeUpdate();
     }
 }

@@ -1,12 +1,12 @@
 package com.peterbuki.bookingtool.util;
 
-import com.peterbuki.bookingtool.model.Server;
+import com.peterbuki.bookingtool.model.ServerDto;
 import org.apache.commons.lang.StringUtils;
 
 public class Utility {
 
 
-    public static String serverFormatter(Server server, int columns) {
+    public static String serverFormatter(ServerDto server, int columns) {
         StringBuilder serverString = new StringBuilder();
         appendHeader(serverString, "Test v1.0", columns);
 
@@ -52,8 +52,8 @@ public class Utility {
 
     private static Integer id = 0;
 
-    public static Server generateServer(String hostname) {
-        Server server = new Server();
+    public static ServerDto generateServer(String hostname) {
+        ServerDto server = new ServerDto();
 
         server.setId(++id);
         server.setType("HP DL380 G7");
